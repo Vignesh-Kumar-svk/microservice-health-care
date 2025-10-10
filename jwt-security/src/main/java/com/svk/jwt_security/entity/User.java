@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Getter
@@ -24,14 +24,14 @@ public class User {
     private Long Id;
 
     @NotBlank
-    private String user_name;
+    private String userName;
 
     @NotBlank
     @Email
     private String  email;
 
     @NotBlank (message = "Encrypted password")
-    private String password_Bcrypt;
+    private String password;
 
     private Timestamp created_at;
 

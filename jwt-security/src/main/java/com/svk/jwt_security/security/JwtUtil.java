@@ -1,14 +1,25 @@
 package com.svk.jwt_security.security;
 
 
+import com.svk.jwt_security.entity.Roles;
+import com.svk.jwt_security.entity.User;
+import com.svk.jwt_security.repository.UserRepository;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Component
 public class JwtUtil {
 
 
@@ -23,4 +34,49 @@ public class JwtUtil {
 
     //Expiration time
     private final int jwtTokenExpiry = 300000; //5 mins
+
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public String generateToken(String  userName){
+
+        User user = userRepository.findByuserName(userName);
+        Set<Roles> userRoles = user.getRoles();
+
+        // Convert roles to list of Strings
+        String roles = userRoles.stream()
+                .map(Roles::getRoleName)
+                .collect(Collectors.joining(","));
+
+        return Jwts.builder()
+                .subject(String.valueOf(user.getUserName()))// ✅ replaces setSubject()
+                .claim("roles",roles)
+                .issuedAt(new Date())                    // ✅ replaces setIssuedAt()
+                .expiration(new Date(System.currentTimeMillis() + jwtTokenExpiry))
+                .signWith(secretKey)
+                .compact();
+
+    }
+
+    public String extractUserName (String token){
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
+    }
+
+    public Set<String> extractRoles(String token){
+        System.out.println(" ----------> "+Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload());
+        String rolesFromToken =  Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("roles", String.class);
+        return Collections.singleton(rolesFromToken);
+
+    }
+
+    public boolean isTokenValid(String token){
+        try{
+            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

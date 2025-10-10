@@ -18,7 +18,7 @@ public class Roles {
     private Long id;
 
     @NotBlank
-    private String role_name;
+    private String roleName;
 
     private String description;
 }
