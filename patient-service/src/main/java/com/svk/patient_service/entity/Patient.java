@@ -19,9 +19,20 @@ import java.util.UUID;
 @Table(name="patients")
 public class Patient{
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private UUID patientId;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID patientId;
+    private String patientId;
+
+    @PrePersist
+    public void generateId() {
+        if (this.patientId == null) {
+            // Short 5-character UUID
+            this.patientId = "P-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+        }
+    }
 
     @Column(name="name")
     @NotNull
