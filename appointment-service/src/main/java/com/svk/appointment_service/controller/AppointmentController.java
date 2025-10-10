@@ -2,6 +2,8 @@ package com.svk.appointment_service.controller;
 
 
 import com.svk.appointment_service.dto.AppointmentRequestDto;
+import com.svk.appointment_service.dto.AppointmentResponseDto;
+import com.svk.appointment_service.service_impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppointmentController {
 
     @Autowired
-    AppointmentRequestDto appointmentRequestDto;
+    AppointmentServiceImpl appointmentService;
 
     @PostMapping("/booking")
-    public ResponseEntity<String> createBooking(@RequestBody AppointmentRequestDto appointmentRequestDto){
-
+    public ResponseEntity<AppointmentResponseDto> createBooking(@RequestBody AppointmentRequestDto appointmentRequestDto){
+        AppointmentResponseDto appointmentResponseDto = appointmentService.bookingAppointment(appointmentRequestDto);
+        return ResponseEntity.ok().body(appointmentResponseDto);
     }
 }

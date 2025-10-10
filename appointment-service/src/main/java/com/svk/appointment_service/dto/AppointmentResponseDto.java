@@ -1,8 +1,12 @@
 package com.svk.appointment_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
+@Component
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AppointmentResponseDto {
 
     private String patientName;

@@ -27,7 +27,7 @@ public class Appointment {
     private String doctorId;
 
     @Enumerated(EnumType.STRING)
-    private String appointmentStatus;
+    private AppointmentStatus appointmentStatus;
 
     private String reason;
 
