@@ -56,6 +56,6 @@ public class Patient{
     private String  medicalHistory;
 
     @NotNull
-    private LocalDate registered_date;
+    private LocalDate registeredDate;
 
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
-@Component
 public class PatientResponseDto {
 
     private String name;
