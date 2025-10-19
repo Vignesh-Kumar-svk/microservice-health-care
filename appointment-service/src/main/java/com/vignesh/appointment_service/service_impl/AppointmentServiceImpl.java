@@ -9,6 +9,7 @@ import com.vignesh.appointment_service.repository.AppointmentRepository;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 //import org.springframework.web.client.RestTemplate;
 
@@ -27,12 +28,15 @@ public class AppointmentServiceImpl {
 
     private final RedissonClient redissonClient;
 
+    private final KafkaTemplate<String, AppointmentResponseDto> kafkaTemplate;
+
 
 //    private final RestTemplate restTemplate;
 
-    public AppointmentServiceImpl(RedissonClient redissonClient) {
+    public AppointmentServiceImpl(RedissonClient redissonClient, KafkaTemplate kafkaTemplate) {
         this.redissonClient = redissonClient;
 //        this.restTemplate = restTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -70,6 +74,8 @@ public class AppointmentServiceImpl {
             appointment.setAppointmentTime(LocalTime.parse(appointmentRequestDto.getAppointmentTime()));
             appointment.setAppointmentStatus(AppointmentStatus.BOOKED);
             appointmentRepository.save(appointment);
+
+            kafkaTemplate.send("notificationTopic", appointmentResponseDto);
 
 
             return bookingMapper.onboardResponseDTO(appointment);

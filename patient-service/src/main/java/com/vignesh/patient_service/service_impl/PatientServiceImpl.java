@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientServiceImpl {
@@ -27,6 +28,10 @@ public class PatientServiceImpl {
     public List<PatientResponseDto> listPatientDetails(){
         List<Patient> patients = patientRepository.findAll();
         return patients.stream().map(patientResponseMapper::convertToDtoForResponse).toList();
+    }
 
+    public PatientResponseDto getPatientById(String Id){
+        Patient patient = patientRepository.getReferenceById(Id);
+        return patientResponseMapper.convertToDtoForResponse(patient);
     }
 }

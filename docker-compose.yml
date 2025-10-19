@@ -9,8 +9,18 @@ services:
       POSTGRES_DB: patientdb
     ports:
       - "5432:5432"
+    networks:
+      - hospital-network
     volumes:
       - patient-db-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis-local-test-2
+    ports:
+      - "6379:6379"
+    networks:
+      - hospital-network
 
   appointment-db:
     image: postgres:15
@@ -23,32 +33,102 @@ services:
       - "5433:5432"
     volumes:
       - appointment-db-data:/var/lib/postgresql/data
+    networks:
+      - hospital-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka-broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8086:8080"
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-broker:29092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+
+  eureka-server-service:
+    build:
+      context: ./eureka-server-service
+    container_name: eureka-server-service
+    ports:
+      - "8763:8763"
+    environment:
+      - EUREKA_CLIENT_REGISTERWITH_EUREKA=false
+      - EUREKA_CLIENT_FETCHREGISTRY=false
+    networks:
+      - hospital-network
 
   patient-service:
     build:
       context: ./patient-service
     container_name: patient-service
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: vignesh
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
     depends_on:
       - patient-db
+      - eureka-server-service
+    networks:
+      - hospital-network
 
   appointment-service:
     build:
       context: ./appointment-service
     container_name: appointment-service
     ports:
-      - "8082:8080"
+      - "8082:8082"
+    networks:
+      - hospital-network
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://appointment-db:5432/appointmentdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: vignesh
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
+      spring.data.redis.host: redis
+      spring.data.redis.port: 6379
+      spring.cache.type: redis
     depends_on:
       - appointment-db
+      - eureka-server-service
+      - redis
+
+
+
+
+networks:
+  hospital-network:
+    driver: bridge
 
 volumes:
   patient-db-data:

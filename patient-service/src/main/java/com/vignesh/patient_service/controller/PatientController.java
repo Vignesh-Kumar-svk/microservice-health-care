@@ -36,4 +36,10 @@ public class PatientController {
         return ResponseEntity.ok().body(allPatients);
 
     }
+
+    @GetMapping("/patient-id/{id}")
+    public ResponseEntity<PatientResponseDto> getPatientByPatientId(@PathVariable String patientId){
+        PatientResponseDto patientDetail = patientService.getPatientById(patientId);
+        return ResponseEntity.ok().body(patientDetail);
+    }
 }

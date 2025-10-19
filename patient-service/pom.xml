@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>patient-service</name>
 	<description>Spring Boot Project for  Patient service</description>
+    <packaging>jar</packaging>
 	<url/>
 	<licenses>
 		<license/>
@@ -110,7 +111,7 @@
 	</dependencyManagement>
 
 	<build>
-        <finalName>patient-module</finalName>
+        <finalName>patient-service-0.0.1-SNAPSHOT</finalName>
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
