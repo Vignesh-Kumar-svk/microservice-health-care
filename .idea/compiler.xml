@@ -19,7 +19,7 @@
         </processorPath>
         <module name="patient-service" />
       </profile>
-      <profile name="Annotation profile for appointment-service" enabled="true">
+      <profile name="Annotation profile for notification-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -28,6 +28,7 @@
         </processorPath>
         <module name="appointment-service" />
         <module name="jwt-security" />
+        <module name="notification-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -37,6 +38,7 @@
       <module name="appointment-service" options="-parameters" />
       <module name="eureka-server-service" options="-parameters" />
       <module name="jwt-security" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />
     </option>
   </component>
