@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -25,6 +26,10 @@ public class Appointment {
 
     @NotBlank
     private String doctorId;
+
+    @NotBlank
+    @Email
+    private String patientEmailId;
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus appointmentStatus;

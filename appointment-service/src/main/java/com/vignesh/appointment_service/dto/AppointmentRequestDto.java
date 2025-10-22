@@ -11,6 +11,7 @@ public class AppointmentRequestDto {
 
     private String patientId;
     private String doctorId;
+    private String patientEmailId;
     private String appointmentDate;
     private String appointmentTime;
 

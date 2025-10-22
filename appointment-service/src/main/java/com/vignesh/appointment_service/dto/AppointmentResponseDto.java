@@ -15,4 +15,5 @@ public class AppointmentResponseDto {
     private String appointmentTime;
     private String message;
     private String bookingStatus;
+    private String to;
 }

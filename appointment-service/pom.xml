@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>appointment-service</name>
 	<description>Demo project for Spring Boot Microservice</description>
+    <packaging>jar</packaging>
 	<url/>
 	<licenses>
 		<license/>
@@ -103,7 +104,6 @@
 	<build>
         <finalName>appointment-service-0.0.1-SNAPSHOT</finalName>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

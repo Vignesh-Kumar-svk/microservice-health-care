@@ -4,6 +4,7 @@ import com.vignesh.appointment_service.dto.AppointmentRequestDto;
 import com.vignesh.appointment_service.dto.AppointmentResponseDto;
 import com.vignesh.appointment_service.entity.Appointment;
 import com.vignesh.appointment_service.entity.AppointmentStatus;
+import com.vignesh.appointment_service.event.KafkaPublisher;
 import com.vignesh.appointment_service.mapper.BookingMapper;
 import com.vignesh.appointment_service.repository.AppointmentRepository;
 import org.redisson.api.RLock;
@@ -28,15 +29,15 @@ public class AppointmentServiceImpl {
 
     private final RedissonClient redissonClient;
 
-    private final KafkaTemplate<String, AppointmentResponseDto> kafkaTemplate;
+    private final KafkaPublisher kafkaPublisher;
 
 
 //    private final RestTemplate restTemplate;
 
-    public AppointmentServiceImpl(RedissonClient redissonClient, KafkaTemplate kafkaTemplate) {
+    public AppointmentServiceImpl(RedissonClient redissonClient, KafkaTemplate kafkaTemplate, KafkaPublisher kafkaPublisher) {
         this.redissonClient = redissonClient;
+        this.kafkaPublisher = kafkaPublisher;
 //        this.restTemplate = restTemplate;
-        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -67,22 +68,30 @@ public class AppointmentServiceImpl {
 
             }
 
-            Appointment appointment = new Appointment();
-            appointment.setPatientId(appointmentRequestDto.getPatientId());
-            appointment.setDoctorId(appointmentRequestDto.getDoctorId());
-            appointment.setAppointmentDate(LocalDate.parse(appointmentRequestDto.getAppointmentDate()));
-            appointment.setAppointmentTime(LocalTime.parse(appointmentRequestDto.getAppointmentTime()));
-            appointment.setAppointmentStatus(AppointmentStatus.BOOKED);
+            Appointment appointment = getAppointment(appointmentRequestDto);
             appointmentRepository.save(appointment);
 
-            kafkaTemplate.send("notificationTopic", appointmentResponseDto);
+            AppointmentResponseDto  response = bookingMapper.onboardResponseDTO(appointment);
+//            kafkaPublisher.publishAppointment(response);
 
+            kafkaPublisher.publishAppointment(bookingMapper.toEmailDto(response));
 
-            return bookingMapper.onboardResponseDTO(appointment);
+            return response;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
 
+    }
+
+    private Appointment getAppointment(AppointmentRequestDto appointmentRequestDto) {
+        Appointment appointment = new Appointment();
+        appointment.setPatientId(appointmentRequestDto.getPatientId());
+        appointment.setDoctorId(appointmentRequestDto.getDoctorId());
+        appointment.setAppointmentDate(LocalDate.parse(appointmentRequestDto.getAppointmentDate()));
+        appointment.setAppointmentTime(LocalTime.parse(appointmentRequestDto.getAppointmentTime()));
+        appointment.setAppointmentStatus(AppointmentStatus.BOOKED);
+        appointment.setPatientEmailId(appointmentRequestDto.getPatientEmailId());
+        return appointment;
     }
 }

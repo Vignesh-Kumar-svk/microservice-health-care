@@ -4,6 +4,8 @@ package com.vignesh.appointment_service.controller;
 import com.vignesh.appointment_service.dto.AppointmentRequestDto;
 import com.vignesh.appointment_service.dto.AppointmentResponseDto;
 import com.vignesh.appointment_service.service_impl.AppointmentServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/appointment")
 public class AppointmentController {
 
+    Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+
     @Autowired
     AppointmentServiceImpl appointmentService;
 
     @PostMapping("/booking")
     public ResponseEntity<AppointmentResponseDto> createBooking(@RequestBody AppointmentRequestDto appointmentRequestDto){
+        logger.info("HI Appointment Contoller -----> booking");
+        System.out.println("HI appointemnt svc...");
         AppointmentResponseDto appointmentResponseDto = appointmentService.bookingAppointment(appointmentRequestDto);
         return ResponseEntity.ok().body(appointmentResponseDto);
     }

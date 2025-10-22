@@ -37,28 +37,40 @@ services:
       - hospital-network
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - hospital-network
 
-  kafka:
-    image: confluentinc/cp-kafka:7.4.0
-    container_name: kafka-broker
+  broker:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
+    networks:
+      - hospital-network
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT, PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
 
   kafka-ui:
@@ -67,11 +79,20 @@ services:
     ports:
       - "8086:8080"
     depends_on:
-      - kafka
+      - broker
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-broker:29092
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:9092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - hospital-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
 
   eureka-server-service:
     build:
@@ -105,6 +126,7 @@ services:
   appointment-service:
     build:
       context: ./appointment-service
+      dockerfile: Dockerfile
     container_name: appointment-service
     ports:
       - "8082:8082"
@@ -118,11 +140,30 @@ services:
       spring.data.redis.host: redis
       spring.data.redis.port: 6379
       spring.cache.type: redis
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: broker:9092
     depends_on:
       - appointment-db
       - eureka-server-service
       - redis
+      - broker
 
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "8083:8083"
+    networks:
+      - hospital-network
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
+      SPRING_KAFKA_CONSUMER_GROUP_ID: notification-service-group
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: broker:9092
+    depends_on:
+      - appointment-service
+      - eureka-server-service
+      - broker
 
 
 
