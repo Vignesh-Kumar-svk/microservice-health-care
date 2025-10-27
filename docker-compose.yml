@@ -4,15 +4,21 @@ services:
     image: postgres:15-alpine
     container_name: patient-db
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: vignesh
       POSTGRES_DB: patientdb
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - hospital-network
     volumes:
       - patient-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   redis:
     image: redis:alpine
@@ -76,8 +82,6 @@ services:
       timeout: 5s
       retries: 5
 
-
-
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
@@ -98,7 +102,6 @@ services:
       retries: 5
       start_period: 20s
 
-
   eureka-server-service:
     build:
       context: ./eureka-server-service
@@ -111,6 +114,25 @@ services:
     networks:
       - hospital-network
 
+  api-gateway-service:
+    build:
+      context: ./api-gateway-service
+    container_name: api-gateway-service
+    ports:
+      - "3000:3000"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
+      spring.cloud.gateway.server.webflux.routes[0].id: patient-service
+      spring.cloud.gateway.server.webflux.routes[0].uri: lb://patient-service
+      spring.cloud.gateway.server.webflux.routes[0].predicates[0]: Path=/patients/**
+      spring.cloud.gateway.server.webflux.routes[0].filters[0].name: CircuitBreaker
+      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.name: patientSvcCB
+      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.fallbackUri: forward:/fallback/patients
+    depends_on:
+      - eureka-server-service
+    networks:
+      - hospital-network
+
   patient-service:
     build:
       context: ./patient-service
@@ -119,12 +141,13 @@ services:
       - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: vignesh
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
     depends_on:
       - patient-db
       - eureka-server-service
+      - api-gateway-service
     networks:
       - hospital-network
 
@@ -151,6 +174,7 @@ services:
       - eureka-server-service
       - redis
       - broker
+      - api-gateway-service
 
   notification-service:
     build:

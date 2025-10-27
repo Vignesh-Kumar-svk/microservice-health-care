@@ -5,7 +5,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
-        <option value="$PROJECT_DIR$/patient-service/pom.xml" />
         <option value="$PROJECT_DIR$/jwt-security/pom.xml" />
         <option value="$PROJECT_DIR$/api-gateway-service/pom.xml" />
         <option value="$PROJECT_DIR$/appointment-service/pom.xml" />
@@ -15,6 +14,9 @@
         <option value="$PROJECT_DIR$/notifi-service/notifi-service/pom.xml" />
         <option value="$PROJECT_DIR$/auditActions/pom.xml" />
         <option value="$PROJECT_DIR$/audit-actions/pom.xml" />
+        <option value="$PROJECT_DIR$/audit-core/pom.xml" />
+        <option value="$PROJECT_DIR$/auth-service/pom.xml" />
+        <option value="$PROJECT_DIR$/patient-service/pom.xml" />
       </list>
     </option>
   </component>

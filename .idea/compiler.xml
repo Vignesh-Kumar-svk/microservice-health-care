@@ -10,24 +10,14 @@
         <module name="api-gateway-service" />
         <module name="eureka-server-service" />
       </profile>
-      <profile name="Annotation profile for patient-service" enabled="true">
+      <profile name="Annotation profile for auditActions" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
-        <module name="patient-service" />
-      </profile>
-      <profile name="Annotation profile for jwt-security" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
-        </processorPath>
-        <module name="jwt-security" />
+        <module name="audit-core" />
       </profile>
       <profile name="Annotation profile for notification-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -38,15 +28,16 @@
         </processorPath>
         <module name="appointment-service" />
         <module name="notification-service" />
+        <module name="auth-service" />
       </profile>
-      <profile name="Annotation profile for auditActions" enabled="true">
+      <profile name="Annotation profile for patient-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
-        <module name="audit-actions" />
+        <module name="patient-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -57,9 +48,9 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway-service" options="-parameters" />
       <module name="appointment-service" options="-parameters" />
-      <module name="audit-actions" options="-parameters" />
+      <module name="audit-core" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
       <module name="eureka-server-service" options="-parameters" />
-      <module name="jwt-security" options="-parameters" />
       <module name="notifi-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />

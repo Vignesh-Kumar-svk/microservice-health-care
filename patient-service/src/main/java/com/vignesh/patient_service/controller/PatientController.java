@@ -42,4 +42,10 @@ public class PatientController {
         PatientResponseDto patientDetail = patientService.getPatientById(patientId);
         return ResponseEntity.ok().body(patientDetail);
     }
+
+//    // Fallback endpoint for circuit breaker
+//    @GetMapping("/fallback/patient")
+//    public ResponseEntity<String> fallbackPatient() {
+//        return ResponseEntity.ok("Patient Service is currently unavailable. Please try again later.");
+//    }
 }
