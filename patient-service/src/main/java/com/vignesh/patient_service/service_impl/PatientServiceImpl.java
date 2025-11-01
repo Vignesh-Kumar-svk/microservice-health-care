@@ -7,6 +7,7 @@ import com.vignesh.patient_service.repository.PatientRepository;
 import com.vignesh.patient_service.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.vignesh.auditActions.auditActions.aspect.AuditAspect;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,4 +35,6 @@ public class PatientServiceImpl {
         Patient patient = patientRepository.getReferenceById(Id);
         return patientResponseMapper.convertToDtoForResponse(patient);
     }
+
+
 }

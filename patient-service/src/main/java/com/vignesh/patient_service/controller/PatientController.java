@@ -1,5 +1,6 @@
 package com.vignesh.patient_service.controller;
 
+import com.vignesh.auditActions.auditActions.annotation.AuditAction;
 import com.vignesh.patient_service.dto.PatientRequestDto;
 import com.vignesh.patient_service.dto.PatientResponseDto;
 import com.vignesh.patient_service.service_impl.PatientServiceImpl;
@@ -23,6 +24,7 @@ public class PatientController {
 
     @PostMapping("/addDetail")
     @Operation(description = "Create Patient ")
+    @AuditAction
     public ResponseEntity<PatientResponseDto> createPatient(@Valid @RequestBody PatientRequestDto patientRequestDto){
         PatientResponseDto newPatient = patientService.addPatientDetails(patientRequestDto);
         return ResponseEntity.ok().body(newPatient);

@@ -17,6 +17,7 @@
         <option value="$PROJECT_DIR$/audit-core/pom.xml" />
         <option value="$PROJECT_DIR$/auth-service/pom.xml" />
         <option value="$PROJECT_DIR$/patient-service/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>

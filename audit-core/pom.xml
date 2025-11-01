@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.vignesh.auditActions</groupId>
+
+    <parent>
+        <groupId>com.vignesh.healthcare</groupId>
+        <artifactId>microservice-health-care</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+<!--	<groupId>com.vignesh.auditActions</groupId>-->
 	<artifactId>audit-core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>auditActions</name>
+<!--	<version>0.0.1-SNAPSHOT</version>-->
+    <packaging>jar</packaging>
+	<name>Audit Core</name>
 	<description>Demo project for Spring Boot auditActions</description>
 	<url/>
 	<licenses>
@@ -28,6 +30,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,12 +47,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>1.21.3</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -73,7 +70,23 @@
             <artifactId>json</artifactId>
             <version>20250517</version>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 	<build>
 		<plugins>
@@ -101,6 +114,20 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>origin</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 

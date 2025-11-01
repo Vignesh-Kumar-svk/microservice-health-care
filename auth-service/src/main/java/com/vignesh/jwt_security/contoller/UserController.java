@@ -19,10 +19,10 @@ public class UserController {
     @Autowired
     JwtUtil jwtUtil;
 
-    @Value("${role.admin}")
+    @Value("${app.roles.admin}")
     private String roleAdmin;
 
-    @Value("${role.user}")
+    @Value("${app.roles.user}")
     private String roleUser;
 
     @GetMapping("/protected-api")

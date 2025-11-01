@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/notifi-service/notifi-service" isTestSource="false" />
-    </content>
+  <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/notifi-service">
       <sourceFolder url="file://$MODULE_DIR$/notifi-service/notifi-service/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/notifi-service/notifi-service/src/test/java" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.5.6" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.5.6" level="project" />
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/notifi-service/notifi-service" isTestSource="false" />
+    </content>
   </component>
 </module>
