@@ -30,6 +30,11 @@ eureka:
   instance:
     prefer-ip-address: true
 
+logging:
+  level:
+    root: INFO
+    com.vignesh.audit: DEBUG
+
 
 
 

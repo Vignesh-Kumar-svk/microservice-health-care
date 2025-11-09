@@ -152,7 +152,8 @@ services:
 
   patient-service:
     build:
-      context: ./patient-service
+      context: .
+      dockerfile: patient-service/Dockerfile
     container_name: patient-service
     ports:
       - "8081:8081"
