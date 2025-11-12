@@ -1,11 +1,9 @@
-package com.vignesh.appointment_service.dto;
+package com.vignesh.healthcare.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

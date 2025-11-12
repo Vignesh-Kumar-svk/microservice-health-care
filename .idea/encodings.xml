@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/appointment-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/audit-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common-module/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notifi-service/notifi-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/notification-service/src/main/java" charset="UTF-8" />

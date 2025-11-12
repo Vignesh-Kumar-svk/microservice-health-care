@@ -1,6 +1,6 @@
 package com.vignesh.notification_service.listener;
 
-import com.vignesh.notification_service.dto.EmailDto;
+import com.vignesh.healthcare.dto.EmailDto;
 import com.vignesh.notification_service.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class AppointmentEventListener {
         this.emailService = emailService;
     }
 
-    @KafkaListener(topics = "notificationTopic", groupId = "notification-service-group")
+    @KafkaListener(topics = "notificationTopic", containerFactory = "kafkaListenerContainerFactory", groupId = "notification-service-group")
     public void handleAppointmentBooking(@Payload EmailDto event,
                                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                                          @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,

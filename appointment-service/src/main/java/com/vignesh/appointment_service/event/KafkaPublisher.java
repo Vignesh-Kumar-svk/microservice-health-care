@@ -1,8 +1,6 @@
 package com.vignesh.appointment_service.event;
 
-import com.vignesh.appointment_service.dto.AppointmentResponseDto;
-import com.vignesh.appointment_service.dto.EmailDto;
-import com.vignesh.appointment_service.dto.EmailRequestDto;
+import com.vignesh.healthcare.dto.EmailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;

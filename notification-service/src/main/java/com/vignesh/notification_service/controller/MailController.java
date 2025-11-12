@@ -1,6 +1,6 @@
 package com.vignesh.notification_service.controller;
 
-import com.vignesh.notification_service.dto.EmailDto;
+import com.vignesh.healthcare.dto.EmailDto;
 import com.vignesh.notification_service.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

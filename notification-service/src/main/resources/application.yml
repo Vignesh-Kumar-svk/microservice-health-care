@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: notification-service
+  kafka:
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    listener:
+      ack-mode: record
+      concurrency: 3
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: vig24nesh@gmail.com
+    password: xheremmcjfmsjpca
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+#  mail:
+#    host: mailhog
+#    port: 1025
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-service:8763/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+
+

@@ -1,10 +1,10 @@
 package com.vignesh.appointment_service.mapper;
 
-import com.vignesh.appointment_service.dto.EmailDto;
 import com.vignesh.appointment_service.dto.AppointmentRequestDto;
 import com.vignesh.appointment_service.dto.AppointmentResponseDto;
 import com.vignesh.appointment_service.entity.Appointment;
 import com.vignesh.appointment_service.entity.AppointmentStatus;
+import com.vignesh.healthcare.dto.EmailDto;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

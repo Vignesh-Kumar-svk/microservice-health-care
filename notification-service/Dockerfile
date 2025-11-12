@@ -1,29 +1,29 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
-WORKDIR /app
+# Must be root of the project inside container
+WORKDIR /build
 
-# Copy only pom.xml first (for caching dependencies)
+#Copy parent pom
 COPY pom.xml .
 
-# Download dependencies
-RUN mvn dependency:go-offline -B
+# Copy module folders needed for building appointment-service
+COPY common-module ./common-module
+COPY appointment-service ./appointment-service
+COPY notification-service ./notification-service
 
-# Copy all source code
-COPY src ./src
+# Build only notification-service and required modules
+RUN mvn -B -pl notification-service -am clean package -DskipTests
 
-# Build the JAR
-RUN mvn clean package -DskipTests
 
-FROM openjdk:17-jdk AS runner
+# ---- Runtime image ----
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy the built JAR from builder
-COPY --from=builder /app/target/*.jar ./app.jar
+# Copy the built jar from notification-service target folder
+COPY --from=builder /build/notification-service/target/*.jar app.jar
 
-# Expose service port
 EXPOSE 8083
 
-# Start application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 

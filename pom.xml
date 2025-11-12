@@ -26,22 +26,19 @@
 
     <modules>
 <!--        <module>api-gateway-service</module>-->
-        <module>patient-service</module>
-<!--        <module>appointment-service</module>-->
-        <module>audit-core</module>
-<!--        <module>auth-service</module>-->
+<!--        <module>patient-service</module>-->
+        <module>common-module</module>
+        <module>appointment-service</module>
+<!--        <module>audit-core</module>-->
+
+        <!--        <module>auth-service</module>-->
 <!--        <module>eureka-server-service</module>-->
-<!--        <module>notification-service</module>-->
+        <module>notification-service</module>
         <!-- add more microservices here -->
     </modules>
 
     <dependencies>
         <!-- Centralize shared dependency versions -->
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -62,10 +59,7 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
