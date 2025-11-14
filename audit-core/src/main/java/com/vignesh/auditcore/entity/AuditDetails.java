@@ -28,7 +28,7 @@ public class AuditDetails {
     private String userId;
     private String serviceName; // origin service
     private String status; // SUCCESS / FAILED
-    private Map<String, Object> comments; // flexible payload
+    private String comments; // flexible payload
     private Instant timestamp;
 
 }

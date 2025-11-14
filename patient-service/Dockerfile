@@ -1,25 +1,31 @@
+# ------- STAGE 1: Build -------
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
-# Must be root of the project inside container
 WORKDIR /build
 
-# Copy parent pom
+# 1. Copy only pom files (so dependencies are cached properly)
 COPY pom.xml .
+COPY audit-core/pom.xml audit-core/pom.xml
+COPY patient-service/pom.xml patient-service/pom.xml
+COPY common-module/pom.xml common-module/pom.xml
+COPY appointment-service/pom.xml appointment-service/pom.xml
+COPY notification-service/pom.xml notification-service/pom.xml
 
-# Copy module folders needed for building patient-service
-COPY audit-core ./audit-core
-COPY patient-service ./patient-service
+# Cache dependencies ONLY
+RUN mvn -B -pl patient-service -am dependency:go-offline
 
-# Build only patient-service and required modules
+# 2. Copy the complete project (this layer changes when code changes)
+COPY . .
+
+# Build jar for appointment-service
 RUN mvn -B -pl patient-service -am clean package -DskipTests
 
 
-# ---- Runtime image ----
+# ------- STAGE 2: Runtime -------
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy the built jar from patient-service target folder
 COPY --from=builder /build/patient-service/target/*.jar app.jar
 
 EXPOSE 8081

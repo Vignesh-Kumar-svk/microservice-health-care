@@ -1,7 +1,7 @@
 package com.vignesh.patientservice.service_impl;
 
-import com.vignesh.patientservice.dto.PatientRequestDto;
-import com.vignesh.patientservice.dto.PatientResponseDto;
+import com.vignesh.healthcare.dto.PatientRequestDto;
+import com.vignesh.healthcare.dto.PatientResponseDto;
 import com.vignesh.patientservice.mapper.PatientMapper;
 import com.vignesh.patientservice.repository.PatientRepository;
 import com.vignesh.patientservice.entity.Patient;

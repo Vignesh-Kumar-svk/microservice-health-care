@@ -1,7 +1,7 @@
 package com.vignesh.patientservice.mapper;
 
-import com.vignesh.patientservice.dto.PatientRequestDto;
-import com.vignesh.patientservice.dto.PatientResponseDto;
+import com.vignesh.healthcare.dto.PatientRequestDto;
+import com.vignesh.healthcare.dto.PatientResponseDto;
 import com.vignesh.patientservice.entity.Patient;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,8 @@ public class PatientMapper {
 
     public PatientResponseDto convertToDtoForResponse(Patient patient){
         PatientResponseDto patientResponseDto = new PatientResponseDto();
-        patientResponseDto.setName(patient.getName());
+        patientResponseDto.setPatientId(patient.getPatientId());
+        patientResponseDto.setPatientName(patient.getName());
         patientResponseDto.setEmail(patient.getEmail());
         patientResponseDto.setAge(String.valueOf(patient.getAge()));
         return patientResponseDto;

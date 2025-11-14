@@ -23,7 +23,7 @@ public class BookingMapper {
 
     public AppointmentResponseDto onboardResponseDTO(Appointment appointment){
         AppointmentResponseDto appointmentResponseDto = new AppointmentResponseDto();
-        appointmentResponseDto.setPatientName(appointment.getPatientId());
+        appointmentResponseDto.setPatientName(appointment.getPatientName());
         appointmentResponseDto.setDoctorName(appointment.getDoctorId());
         appointmentResponseDto.setBookingStatus(String.valueOf(appointment.getAppointmentStatus()));
         System.out.println("Booking Date / time : " + appointment.getAppointmentDate() + " "+appointment.getAppointmentTime());

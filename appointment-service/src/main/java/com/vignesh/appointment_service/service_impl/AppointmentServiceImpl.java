@@ -1,5 +1,6 @@
 package com.vignesh.appointment_service.service_impl;
 
+import com.vignesh.appointment_service.client.PatientClient;
 import com.vignesh.appointment_service.dto.AppointmentRequestDto;
 import com.vignesh.appointment_service.dto.AppointmentResponseDto;
 import com.vignesh.appointment_service.entity.Appointment;
@@ -7,9 +8,13 @@ import com.vignesh.appointment_service.entity.AppointmentStatus;
 import com.vignesh.appointment_service.event.KafkaPublisher;
 import com.vignesh.appointment_service.mapper.BookingMapper;
 import com.vignesh.appointment_service.repository.AppointmentRepository;
+import com.vignesh.healthcare.dto.PatientResponseDto;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 //import org.springframework.web.client.RestTemplate;
@@ -21,11 +26,15 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class AppointmentServiceImpl {
 
+    private final Logger logger = LoggerFactory.getLogger(AppointmentServiceImpl.class);
     @Autowired
-    AppointmentRepository appointmentRepository;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
-    BookingMapper bookingMapper;
+    private BookingMapper bookingMapper;
+
+    @Autowired
+    private PatientClient patientClient;
 
     private final RedissonClient redissonClient;
 
@@ -85,7 +94,13 @@ public class AppointmentServiceImpl {
     }
 
     private Appointment getAppointment(AppointmentRequestDto appointmentRequestDto) {
+
+        PatientResponseDto patient = patientClient.getPatientByPatientId(appointmentRequestDto.getPatientId()).getBody();
+        String patientName = patient.getName();
+        logger.info("Patient Name retrieved from patient service {}",patientName);
+
         Appointment appointment = new Appointment();
+        appointment.setPatientName(patientName);
         appointment.setPatientId(appointmentRequestDto.getPatientId());
         appointment.setDoctorId(appointmentRequestDto.getDoctorId());
         appointment.setAppointmentDate(LocalDate.parse(appointmentRequestDto.getAppointmentDate()));

@@ -1,4 +1,4 @@
-package com.vignesh.patientservice.dto;
+package com.vignesh.healthcare.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import lombok.Setter;
 public class PatientRequestDto {
 
     @NotBlank(message = "Name is required")
-    @Size(max = 40 , message = "Charater size should be less than 40")
+    @Size(max = 40 , message = "Character size should be less than 40")
     private String name;
 
     @NotBlank(message = "Age is required")

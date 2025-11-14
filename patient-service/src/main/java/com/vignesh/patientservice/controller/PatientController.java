@@ -2,8 +2,8 @@ package com.vignesh.patientservice.controller;
 
 //import com.vignesh.audit_core.annotation.AuditAction;
 import com.vignesh.auditcore.aspect.AuditAspect;
-import com.vignesh.patientservice.dto.PatientRequestDto;
-import com.vignesh.patientservice.dto.PatientResponseDto;
+import com.vignesh.healthcare.dto.PatientRequestDto;
+import com.vignesh.healthcare.dto.PatientResponseDto;
 import com.vignesh.patientservice.service_impl.PatientServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

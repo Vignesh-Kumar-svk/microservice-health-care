@@ -25,6 +25,8 @@ public class Appointment {
     @NotBlank
     private String patientId;
 
+    private String patientName;
+
     @NotBlank
     private String doctorId;
 

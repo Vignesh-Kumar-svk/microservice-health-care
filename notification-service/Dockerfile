@@ -7,6 +7,8 @@ WORKDIR /build
 COPY pom.xml .
 
 # Copy module folders needed for building appointment-service
+COPY audit-core ./audit-core
+COPY patient-service ./patient-service
 COPY common-module ./common-module
 COPY appointment-service ./appointment-service
 COPY notification-service ./notification-service

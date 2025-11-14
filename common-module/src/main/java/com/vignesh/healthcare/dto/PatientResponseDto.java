@@ -1,4 +1,4 @@
-package com.vignesh.patientservice.dto;
+package com.vignesh.healthcare.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,8 @@ import lombok.Setter;
 @Setter
 public class PatientResponseDto {
 
-    private String name;
+    private String patientId;
+    private String patientName;
     private String email;
     private String age;
 
