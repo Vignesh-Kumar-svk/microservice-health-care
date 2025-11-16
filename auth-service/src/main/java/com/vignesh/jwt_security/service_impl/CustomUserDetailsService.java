@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
+
     UserRegisterRequest userRegisterRequest;
 
     @Autowired

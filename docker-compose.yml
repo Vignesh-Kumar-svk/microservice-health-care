@@ -1,5 +1,24 @@
 version: "3.9"
 services:
+  auth-db:
+    image: postgres:15-alpine
+    container_name: auth-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: vignesh
+      POSTGRES_DB: authdb
+    ports:
+      - "5436:5432"
+    networks:
+      - hospital-network
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   patient-db:
     image: postgres:15-alpine
     container_name: patient-db
@@ -32,7 +51,6 @@ services:
       - auditdetails-db-data:/var/lib/postgresql/data
     networks:
       - hospital-network
-
 
 
   appointment-db:
@@ -92,6 +110,24 @@ services:
       - eureka-server-service
     networks:
       - hospital-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "8000:8000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/authdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vignesh
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
+    depends_on:
+      - auth-db
+      - eureka-server-service
+    networks:
+      hospital-network:
 
   patient-service:
     build:
@@ -215,3 +251,4 @@ volumes:
   patient-db-data:
   appointment-db-data:
   auditdetails-db-data:
+  auth-db-data:

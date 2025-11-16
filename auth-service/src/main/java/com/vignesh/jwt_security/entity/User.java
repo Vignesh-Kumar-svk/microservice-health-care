@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,14 +21,14 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID Id;
 
     @NotBlank
     private String userName;
 
-    @NotBlank
     @Email
+    @Column(unique = true, nullable = false)
     private String  email;
 
     @NotBlank (message = "Encrypted password")

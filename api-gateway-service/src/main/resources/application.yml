@@ -1,6 +1,14 @@
+server:
+  port: 3000
+
+
 spring:
   application:
     name: api-gateway-service
+
+#The API Gateway automatically creates routes
+#  for every service registered in Eureka
+#  By using their SERVICE-NAMEs.
   cloud:
     gateway:
       server:
@@ -8,23 +16,6 @@ spring:
           discovery:
             locator:
               enabled: true
-          route:
-            0:
-              id:
-
-              uri: lb://patient-service
-              predicates:
-                - Path=/patients/**
-              filters:
-                - CircuitBreaker=name=patientSvcFallback,fallbackUri=forward:/fallback/patients
-
-
-
-server:
-  port: 3000
-
-
-
 #eureka
 eureka:
   client:
@@ -51,18 +42,18 @@ management:
       show-details: always
 
 #Define Static routes for Service application
-spring.cloud.gateway.server.webflux.routes[0].id=patient-service
-spring.cloud.gateway.server.webflux.routes[0].uri=lb://patient-service
-spring.cloud.gateway.server.webflux.routes[0].predicates[0]=Path=/patients/**
-spring.cloud.gateway.server.webflux.routes[0].filters[0]=CircuitBreaker=name=patientSvcCB,fallbackUri=/fallback/patients
-
-resilience4j.circuitbreaker.instances.appointmentScvFallback.failureRateThreshold=50
-resilience4j.circuitbreaker.instances.appointmentScvFallback.waitDurationInOpenState=10s
-resilience4j.circuitbreaker.instances.appointmentScvFallback.slidingWindowSize=10
-resilience4j.circuitbreaker.instances.appointmentScvFallback.permittedNumberOfCallsInHalfOpenState=3
-
-# Patient Service CB
-resilience4j.circuitbreaker.instances.patientSvcFallback.failureRateThreshold=50
-resilience4j.circuitbreaker.instances.patientSvcFallback.waitDurationInOpenState=10s
-resilience4j.circuitbreaker.instances.patientSvcFallback.slidingWindowSize=10
-
+#spring.cloud.gateway.server.webflux.routes[0].id=patient-service
+#spring.cloud.gateway.server.webflux.routes[0].uri=lb://patient-service
+#spring.cloud.gateway.server.webflux.routes[0].predicates[0]=Path=/patients/**
+#spring.cloud.gateway.server.webflux.routes[0].filters[0]=CircuitBreaker=name=patientSvcCB,fallbackUri=/fallback/patients
+#
+#resilience4j.circuitbreaker.instances.appointmentScvFallback.failureRateThreshold=50
+#resilience4j.circuitbreaker.instances.appointmentScvFallback.waitDurationInOpenState=10s
+#resilience4j.circuitbreaker.instances.appointmentScvFallback.slidingWindowSize=10
+#resilience4j.circuitbreaker.instances.appointmentScvFallback.permittedNumberOfCallsInHalfOpenState=3
+#
+## Patient Service CB
+#resilience4j.circuitbreaker.instances.patientSvcFallback.failureRateThreshold=50
+#resilience4j.circuitbreaker.instances.patientSvcFallback.waitDurationInOpenState=10s
+#resilience4j.circuitbreaker.instances.patientSvcFallback.slidingWindowSize=10
+#
