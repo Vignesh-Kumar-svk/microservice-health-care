@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: jwt-security
+    name: auth-service
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -19,6 +19,7 @@ spring:
         format_sql: true
       show-sql: true
 
+
 logging:
   level:
     org:
@@ -29,5 +30,15 @@ logging:
         jdbc:
           datasource:
             init: DEBUG
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-service:8763/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
 
 

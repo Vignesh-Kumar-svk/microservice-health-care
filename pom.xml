@@ -25,13 +25,14 @@
 
 
     <modules>
-<!--            <module>api-gateway-service</module>-->
+            <module>api-gateway-service</module>
+            <module>auth-service</module>
             <module>patient-service</module>
             <module>common-module</module>
             <module>appointment-service</module>
             <module>audit-core</module>
 
-            <module>auth-service</module>
+
 <!--            <module>eureka-server-service</module>-->
             <module>notification-service</module>
         <!-- add more microservices here -->

@@ -19,6 +19,10 @@ public class GatewayRoutesConfig {
                         .path("**/appointment/**")
                         .filters(f->f.stripPrefix(1))
                         .uri("lb://appointment-service"))
+                .route("auth-svc", r->r
+                        .path("**/auth/**")
+                        .filters(f->f.stripPrefix(1))
+                        .uri("lb://auth-service"))
                 .build();
     }
 }

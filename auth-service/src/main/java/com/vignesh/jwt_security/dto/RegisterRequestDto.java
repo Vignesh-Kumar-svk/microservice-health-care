@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class UserRegisterRequest {
+public class RegisterRequestDto {
     private String userName;
     private String password;
     private String email;

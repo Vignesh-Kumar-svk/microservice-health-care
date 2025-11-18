@@ -12,6 +12,8 @@ COPY patient-service ./patient-service
 COPY common-module ./common-module
 COPY appointment-service ./appointment-service
 COPY notification-service ./notification-service
+COPY auth-service/pom.xml auth-service/pom.xml
+COPY api-gateway-service/pom.xml api-gateway-service/pom.xml
 
 # Build only notification-service and required modules
 RUN mvn -B -pl notification-service -am clean package -DskipTests

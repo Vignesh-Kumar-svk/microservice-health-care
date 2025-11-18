@@ -11,6 +11,7 @@ COPY common-module/pom.xml common-module/pom.xml
 COPY appointment-service/pom.xml appointment-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
 COPY auth-service/pom.xml auth-service/pom.xml
+COPY api-gateway-service/pom.xml api-gateway-service/pom.xml
 
 # Cache dependencies ONLY
 RUN mvn -B -pl auth-service -am dependency:go-offline

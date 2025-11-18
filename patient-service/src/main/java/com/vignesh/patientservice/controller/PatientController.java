@@ -20,7 +20,7 @@ import java.util.List;
 public class PatientController {
 
     @Autowired
-    PatientServiceImpl patientService;
+    private PatientServiceImpl patientService;
 
 
     @PostMapping("/addDetail")
