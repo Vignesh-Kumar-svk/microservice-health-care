@@ -100,12 +100,13 @@ services:
       - "3000:3000"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
-      spring.cloud.gateway.server.webflux.routes[0].id: patient-service
-      spring.cloud.gateway.server.webflux.routes[0].uri: lb://patient-service
-      spring.cloud.gateway.server.webflux.routes[0].predicates[0]: Path=/patients/**
-      spring.cloud.gateway.server.webflux.routes[0].filters[0].name: CircuitBreaker
-      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.name: patientSvcCB
-      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.fallbackUri: forward:/fallback/patients
+      AUTH_SERVICE_URL: http://auth-service:8000
+#      spring.cloud.gateway.server.webflux.routes[0].id: patient-service
+#      spring.cloud.gateway.server.webflux.routes[0].uri: lb://patient-service
+#      spring.cloud.gateway.server.webflux.routes[0].predicates[0]: Path=/patients/**
+#      spring.cloud.gateway.server.webflux.routes[0].filters[0].name: CircuitBreaker
+#      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.name: patientSvcCB
+#      spring.cloud.gateway.server.webflux.routes[0].filters[0].args.fallbackUri: forward:/fallback/patients
     depends_on:
       - eureka-server-service
     networks:
@@ -116,15 +117,14 @@ services:
       context: .
       dockerfile: auth-service/Dockerfile
     container_name: auth-service
-    ports:
-      - "8000:8000"
+#    ports:
+#      - "8000:8000"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/authdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: vignesh
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
       JWT_SECRET: abcdefghijklmnopqrstuvwx1234567890
-
     depends_on:
       - auth-db
       - eureka-server-service
@@ -136,8 +136,8 @@ services:
       context: .
       dockerfile: patient-service/Dockerfile
     container_name: patient-service
-    ports:
-      - "8081:8081"
+#    ports:
+#      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
       SPRING_DATASOURCE_USERNAME: postgres
@@ -155,8 +155,8 @@ services:
       context: .
       dockerfile: appointment-service/Dockerfile
     container_name: appointment-service
-    ports:
-      - "8082:8082"
+#    ports:
+#      - "8082:8082"
     networks:
       - hospital-network
     environment:

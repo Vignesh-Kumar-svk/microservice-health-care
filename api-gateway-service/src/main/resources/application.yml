@@ -1,7 +1,6 @@
 server:
   port: 3000
 
-
 spring:
   application:
     name: api-gateway-service
@@ -40,6 +39,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+
 
 #Define Static routes for Service application
 #spring.cloud.gateway.server.webflux.routes[0].id=patient-service
