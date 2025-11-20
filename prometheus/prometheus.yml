@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'api-gateway-service'
+    metrics_path: '/actuator/promethus'
+    static_configs:
+      - targets: ['api-gateway-service:9000']
+        labels:
+          application: 'Api gateway Service Application'
+
+  - job_name: 'patient-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['patient-service:8081']
+        labels:
+          application: 'Patient Service Application'

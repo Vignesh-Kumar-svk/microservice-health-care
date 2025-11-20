@@ -1,5 +1,5 @@
 server:
-  port: 3000
+  port: 9000
 
 spring:
   application:
@@ -35,10 +35,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,prometheus # '*' means /actuator/health , /actuator/info , /actuator/metrics ,
+        #/actuator/loggers ,/actuator/env , /actuator/prometheus Expose all actuator endpoints
   endpoint:
     health:
       show-details: always
+    prometheus:
+      enabled: true
 
 
 
