@@ -3,7 +3,7 @@ global:
 
 scrape_configs:
   - job_name: 'api-gateway-service'
-    metrics_path: '/actuator/promethus'
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['api-gateway-service:9000']
         labels:

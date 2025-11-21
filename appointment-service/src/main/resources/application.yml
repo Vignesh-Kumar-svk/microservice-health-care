@@ -44,6 +44,12 @@ eureka:
   instance:
     prefer-ip-address: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
+
 #postgresql
 #spring.datasource.url=jdbc:postgresql://localhost:5432/appointment_records
 #spring.datasource.username=postgres

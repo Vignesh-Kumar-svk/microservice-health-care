@@ -149,6 +149,8 @@ services:
       - api-gateway-service
     networks:
       - hospital-network
+    expose:
+      - 8081
 
   appointment-service:
     build:
