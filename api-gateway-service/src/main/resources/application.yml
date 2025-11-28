@@ -15,11 +15,44 @@ spring:
           discovery:
             locator:
               enabled: true
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          HospitalManagement:
+#            client-id: gateway
+#            client-secret:
+#            client-authentication-method:
+#            authorization-grant-type:
+#            redirect-uri:
+#            scope:
+#              - openid
+#              -
+
+  security:
+    oauth2:
+#      client:
+#        registration:
+#          keycloak:
+#            client-id: api-gateway
+#            client-secret: jm7H0f7Mu8NKEu9OdoM3KunrXY522cJD
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8091/realms/healthcare-realm
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8091/realms/healthcare-realm
+#          jwk-set-uri: http://localhost:8091/realms/healthcare-realm/protocol/openid-connect/certs
+
+
+
 #eureka
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8763/eureka/
+      defaultZone: http://eureka:8763/eureka/
     register-with-eureka: true
 
   instance:
@@ -37,11 +70,21 @@ management:
       exposure:
         include: health,info,prometheus # '*' means /actuator/health , /actuator/info , /actuator/metrics ,
         #/actuator/loggers ,/actuator/env , /actuator/prometheus Expose all actuator endpoints
+  tracing:
+    sampling:
+      probability: 1
+
   endpoint:
     health:
       show-details: always
     prometheus:
       enabled: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: DEBUG
+
+
 
 
 

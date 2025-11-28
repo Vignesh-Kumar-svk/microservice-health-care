@@ -1,6 +1,8 @@
 package com.vignesh.api_gateway_service.config;
 
 import com.vignesh.api_gateway_service.filter.JwtValidationGatewayFilterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,9 @@ public class GatewayRoutesConfig {
 
     @Bean
     public RouteLocator customRoutes(RouteLocatorBuilder routeLocatorBuilder){
+
+        Logger logger = LoggerFactory.getLogger(GatewayRoutesConfig.class);
+        logger.info("Inside gateway custom routes");
         return routeLocatorBuilder.routes()
                // .route("paymentId", r->r.path("/payment/**").uri("http://localhost:9009")) --> Static Routing
                 .route("patient-svc", r-> r  //(Protected)

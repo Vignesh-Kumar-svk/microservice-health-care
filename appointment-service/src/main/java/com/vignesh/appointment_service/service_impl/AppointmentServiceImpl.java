@@ -96,7 +96,7 @@ public class AppointmentServiceImpl {
     private Appointment getAppointment(AppointmentRequestDto appointmentRequestDto) {
 
         PatientResponseDto patient = patientClient.getPatientByPatientId(appointmentRequestDto.getPatientId()).getBody();
-        String patientName = patient.getName();
+        String patientName = patient.getPatientName();
         logger.info("Patient Name retrieved from patient service {}",patientName);
 
         Appointment appointment = new Appointment();

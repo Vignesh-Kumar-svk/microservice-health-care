@@ -16,62 +16,87 @@ import reactor.core.publisher.Mono;
 public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFactory<JwtValidationGatewayFilterFactory.Config> {
 
     Logger logger = LoggerFactory.getLogger(JwtValidationGatewayFilterFactory.class);
-    private final WebClient webClient;
-
-    @Value("${auth.service.url}")
-    private String authServiceUrl;
+//    private final WebClient webClient;
+//
+//    @Value("${auth.service.url}")
+//    private String authServiceUrl;
+//
+//    public static class Config {}
+//
+//    public JwtValidationGatewayFilterFactory(WebClient.Builder webClientBuilder) {
+//        this.webClient = webClientBuilder.build();
+//    }
+//
+//    @Override
+//    public GatewayFilter apply(Config config) {
+//
+//        logger.info("authService url----------> {}",authServiceUrl);
+//
+//        return (exchange, chain) -> {
+//            String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+//
+//            if(token==null || !token.startsWith("Bearer "))
+//            {
+//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return exchange.getResponse().setComplete();
+//            }
+//
+//            return webClient.get()
+//                    .uri(authServiceUrl + "/auth/validate")
+//                    .header(HttpHeaders.AUTHORIZATION, token)
+//                    .retrieve()
+//                    // STEP 1: Catch 4xx (400–499) from auth-service
+//                    .onStatus(
+//                            status -> status.is4xxClientError(),
+//                            response -> Mono.error(new RuntimeException("INVALID_TOKEN"))
+//                    )
+//
+//                    // STEP 2: Catch 5xx (500–599) from auth-service
+//                    .onStatus(
+//                            status -> status.is5xxServerError(),
+//                            response -> Mono.error(new RuntimeException("AUTH_SERVICE_DOWN"))
+//                    )
+//
+//                    .toBodilessEntity()
+//                    // STEP 3: If token valid -> continue filter chain
+//                    .flatMap(res -> chain.filter(exchange))
+//
+//                    .onErrorResume(ex -> {
+//                        if ("INVALID_TOKEN".equals(ex.getMessage())) {
+//                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);   // 401
+//                        } else if ("AUTH_SERVICE_DOWN".equals(ex.getMessage())) {
+//                            exchange.getResponse().setStatusCode(HttpStatus.SERVICE_UNAVAILABLE); // 503
+//                        } else {
+//                            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR); // 500 fallback
+//                        }
+//                        return exchange.getResponse().setComplete();
+//                    });
+//
+//        };
+//    }
 
     public static class Config {}
 
-    public JwtValidationGatewayFilterFactory(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+    public JwtValidationGatewayFilterFactory() {
+        super(Config.class);
     }
 
     @Override
     public GatewayFilter apply(Config config) {
-
-        logger.info("authService url----------> {}",authServiceUrl);
-
         return (exchange, chain) -> {
-            String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
-            if(token==null || !token.startsWith("Bearer "))
-            {
+            String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            logger.info("Token -----------> {}",token);
+
+            if (token == null || !token.startsWith("Bearer ")) {
+                logger.info("Inside bearer confition");
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
 
-            return webClient.get()
-                    .uri(authServiceUrl + "/auth/validate")
-                    .header(HttpHeaders.AUTHORIZATION, token)
-                    .retrieve()
-                    // STEP 1: Catch 4xx (400–499) from auth-service
-                    .onStatus(
-                            status -> status.is4xxClientError(),
-                            response -> Mono.error(new RuntimeException("INVALID_TOKEN"))
-                    )
-
-                    // STEP 2: Catch 5xx (500–599) from auth-service
-                    .onStatus(
-                            status -> status.is5xxServerError(),
-                            response -> Mono.error(new RuntimeException("AUTH_SERVICE_DOWN"))
-                    )
-
-                    .toBodilessEntity()
-                    // STEP 3: If token valid -> continue filter chain
-                    .flatMap(res -> chain.filter(exchange))
-
-                    .onErrorResume(ex -> {
-                        if ("INVALID_TOKEN".equals(ex.getMessage())) {
-                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);   // 401
-                        } else if ("AUTH_SERVICE_DOWN".equals(ex.getMessage())) {
-                            exchange.getResponse().setStatusCode(HttpStatus.SERVICE_UNAVAILABLE); // 503
-                        } else {
-                            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR); // 500 fallback
-                        }
-                        return exchange.getResponse().setComplete();
-                    });
-
+            // Token already validated by Spring Security
+            // Here you can extract roles if needed
+            return chain.filter(exchange);
         };
     }
 }

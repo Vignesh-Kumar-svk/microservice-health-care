@@ -48,7 +48,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
 
 #postgresql
 #spring.datasource.url=jdbc:postgresql://localhost:5432/appointment_records
