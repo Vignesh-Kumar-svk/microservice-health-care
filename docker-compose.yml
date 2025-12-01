@@ -1,17 +1,21 @@
-version: "3.9"
+
 services:
   keycloak-db:
     image: postgres:15-alpine
+    container_name: keycloak-db
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak123
     ports:
       - "5437:5432"
+#    volumes:
+#      - keycloak-data:/var/lib/postgresql/data
     volumes:
-      - keycloak-data:/var/lib/postgresql/data
+      - kc-postgres-data:/var/lib/postgresql/data
     networks:
       - hospital-network
+    restart: unless-stopped
 
   auth-db:
     image: postgres:15-alpine
@@ -105,19 +109,28 @@ services:
 
   eureka-server-service:
     build:
-      context: ./eureka-server-service
+      context: .                # build from project root
+      dockerfile: ./eureka-server-service/Dockerfile
+    image: eureka-service-jar
     container_name: eureka-server-service
     ports:
       - "8763:8763"
     environment:
-      - EUREKA_CLIENT_REGISTERWITH_EUREKA=false
-      - EUREKA_CLIENT_FETCHREGISTRY=false
+      EUREKA_CLIENT_REGISTERWITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCHREGISTRY: "false"
     networks:
       - hospital-network
+    healthcheck: # ✅ Optional but good for microservice monitoring
+      test: [ "CMD", "wget", "--spider", "http://localhost:8763/actuator/health" ]
+      interval: 10s
+      retries: 3
+      timeout: 5s
 
   api-gateway-service:
     build:
-      context: ./api-gateway-service
+      context: .                # build from project root
+      dockerfile: ./api-gateway-service/Dockerfile
+    image: api-gateway-service-jar
     container_name: api-gateway-service
     ports:
       - "9000:9000"
@@ -135,6 +148,29 @@ services:
       - keycloak
     networks:
       - hospital-network
+
+  patient-service:
+    build:
+      context: .
+      dockerfile: ./patient-service/Dockerfile
+    image: patient-service-jar
+    container_name: patient-service
+    #    ports:
+    #      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: vignesh
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
+    depends_on:
+      - keycloak
+      - patient-db
+      - eureka-server-service
+      - api-gateway-service
+    networks:
+      - hospital-network
+    expose:
+      - "8081"
 
   auth-service:
     build:
@@ -155,27 +191,6 @@ services:
     networks:
       - hospital-network
 
-  patient-service:
-    build:
-      context: .
-      dockerfile: patient-service/Dockerfile
-    container_name: patient-service
-#    ports:
-#      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: vignesh
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
-    depends_on:
-      - patient-db
-      - eureka-server-service
-      - keycloak
-      - api-gateway-service
-    networks:
-      - hospital-network
-    expose:
-      - "8081"
 
   appointment-service:
     build:
@@ -307,12 +322,13 @@ services:
   keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak
-    command: ["start-dev", "--import-realm"]
+    command: start-dev
     environment:
       # ---- HTTP + hostname / issuer settings ----
-#      KC_PROXY: "edge"
-#      KC_HOSTNAME: "keycloak"
+#      KC_HOSTNAME: keycloak  # ✅ for container network
+#      KC_HOSTNAME_PORT: 8080   # ✅ Internal port
 #      KC_HOSTNAME_STRICT: "false"
+#      KC_HTTP_ENABLED: "true"
 
       KC_DB_URL: "jdbc:postgresql://keycloak-db:5432/keycloak"
       KC_DB_USERNAME: "keycloak"
@@ -321,12 +337,14 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: "postgres"
     ports:
-      - "8091:8080"
-    volumes:
-#      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
-      - keycloak-data:/opt/keycloak/data
+      - "8080:8080"
+#    volumes:
+##      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+#      - keycloak-data:/opt/keycloak/data
     networks:
       - hospital-network
+    depends_on:
+      - keycloak-db
 
   zipkin:
     container_name: zipkin
@@ -346,6 +364,6 @@ volumes:
   appointment-db-data:
   auditdetails-db-data:
   auth-db-data:
-  keycloak-data:
-    driver: local
+  kc-postgres-data:      # ✅ Postgres data persistent (Keycloak DB)
+#  keycloak-data:
 #  keycloak-db-data:
