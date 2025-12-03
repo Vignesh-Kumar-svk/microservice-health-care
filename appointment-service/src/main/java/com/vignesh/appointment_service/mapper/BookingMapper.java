@@ -16,7 +16,7 @@ public class BookingMapper {
     public AppointmentResponseDto convertToDTO(AppointmentRequestDto appointmentRequestDto){
         AppointmentResponseDto appointmentResponseDto = new AppointmentResponseDto();
         appointmentResponseDto.setPatientName(appointmentRequestDto.getPatientId());
-        appointmentResponseDto.setMessage("Slot already booked or being booked");
+        appointmentResponseDto.setMessage(appointmentRequestDto.getMessage());
         appointmentResponseDto.setBookingStatus(String.valueOf(AppointmentStatus.FAILED));
         return appointmentResponseDto;
     }

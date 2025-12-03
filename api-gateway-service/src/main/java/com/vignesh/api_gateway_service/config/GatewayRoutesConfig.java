@@ -3,6 +3,7 @@ package com.vignesh.api_gateway_service.config;
 import com.vignesh.api_gateway_service.filter.JwtValidationGatewayFilterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +39,12 @@ public class GatewayRoutesConfig {
                         .path("/auth/**")
 //                        .filters(f->f.stripPrefix(1))
                         .uri("lb://auth-service"))
+                .route("patient-docs", r -> r
+                        .path("/patient-docs/v3/api-docs")
+                        .filters(f -> f.setPath("/v3/api-docs")) // inside patient-service
+                        .uri("lb://patient-service"))
                 .build();
+
     }
+
 }

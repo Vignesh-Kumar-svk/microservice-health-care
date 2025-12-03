@@ -22,7 +22,11 @@ public class SecurityConfig {
         logger.info("Inside security filter chain - SecurityConfig INITIALIZED");
         httpSecurity.csrf(csrf ->csrf.disable())
                 .authorizeExchange(auth -> auth
-                        .pathMatchers("/actuator/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .pathMatchers("/actuator/**", "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/v3/api-docs/**",
+                                "/patient-docs/**").permitAll()
                         .anyExchange().authenticated())
 //                .oauth2Login(Customizer.withDefaults()) //For browser login
                 .oauth2ResourceServer(oauth -> oauth.jwt(

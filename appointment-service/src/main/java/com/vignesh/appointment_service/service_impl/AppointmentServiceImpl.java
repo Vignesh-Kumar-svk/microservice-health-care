@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -61,6 +62,7 @@ public class AppointmentServiceImpl {
             boolean isLocked =  lock.tryLock(5, 10, TimeUnit.SECONDS);
             //Slot is being booked by someone else. Please try again!";
             if(!isLocked){
+                appointmentRequestDto.setMessage("Slot being booked by someone else....pls wait");
 //                // Call Patient Service
 //                String patientServiceUrl = "http://PATIENT-SERVICE/patients/" + appointment.getPatientId();
 //                Patient patient = restTemplate.getForObject(patientServiceUrl, PatientDTO.class);
@@ -73,6 +75,8 @@ public class AppointmentServiceImpl {
 
             if(appointmentRepository.existsByAppointmentDateAndAppointmentTime(date, time)){
                 //"Slot already booked!";
+                appointmentRequestDto.setMessage("Slot already booked");
+
                 return bookingMapper.convertToDTO(appointmentRequestDto);
 
             }
@@ -108,5 +112,13 @@ public class AppointmentServiceImpl {
         appointment.setAppointmentStatus(AppointmentStatus.BOOKED);
         appointment.setPatientEmailId(appointmentRequestDto.getPatientEmailId());
         return appointment;
+    }
+
+    public AppointmentResponseDto cancelAppointment(AppointmentRequestDto appointmentRequestDto){
+        Object patientId = patientClient.getPatientByPatientId(appointmentRequestDto.getPatientId());
+        appointmentRequestDto.setMessage("Appointment is deleted");
+        appointmentRepository.deleteById((UUID) patientId);
+        return bookingMapper.convertToDTO(appointmentRequestDto);
+
     }
 }

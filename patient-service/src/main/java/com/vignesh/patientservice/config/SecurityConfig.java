@@ -32,7 +32,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/actuator/**","/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/v3/api-docs/**",
+                                "/patient-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patients/**")
                         .hasAnyRole("USER", "DOCTOR", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/patients/**")

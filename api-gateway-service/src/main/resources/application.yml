@@ -85,7 +85,15 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.web.reactive: DEBUG
 
-
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: patient-service
+        url: /patient-docs/v3/api-docs
+      - name: appointment-service
+        url: /appointment-docs/v3/api-docs
 
 
 
