@@ -152,7 +152,7 @@ services:
   patient-service:
     build:
       context: .
-      dockerfile: ./patient-service/Dockerfile
+      target: patient-service
     image: patient-service-jar
     container_name: patient-service
     #    ports:
@@ -195,7 +195,9 @@ services:
   appointment-service:
     build:
       context: .
-      dockerfile: appointment-service/Dockerfile
+      target: appointment-service
+    image: appointment-service-jar
+
     container_name: appointment-service
 #    ports:
 #      - "8082:8082"
@@ -216,11 +218,11 @@ services:
       - redis
       - broker
       - api-gateway-service
-      - notification-service
+#      - notification-service
 
   notification-service:
     build:
-      context: ./notification-service
+      context: .
       dockerfile: Dockerfile
     container_name: notification-service
     ports:

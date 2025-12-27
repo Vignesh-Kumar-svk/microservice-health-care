@@ -33,7 +33,6 @@
             <module>audit-core</module>
             <module>eureka-server-service</module>
             <module>notification-service</module>
-        <!-- add more microservices here -->
     </modules>
 
     <dependencies>
