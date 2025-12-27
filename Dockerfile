@@ -35,6 +35,6 @@ COPY --from=builder /build/notification-service/target/notification-service*.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # AUDIT SERVICE
-FROM base AS audit-service
-COPY --from=builder /build/audit-service/target/audit-service*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#FROM base AS audit-service
+#COPY --from=builder /build/audit-service/target/audit-service*.jar app.jar
+#ENTRYPOINT ["java", "-jar", "app.jar"]

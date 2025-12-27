@@ -24,9 +24,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/healthcare-realm
-          jwk-set-uri: http://localhost:8080/realms/healthcare-realm/protocol/openid-connect/certs
-
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
 
 eureka:
   client:
@@ -43,6 +41,7 @@ logging:
     root: INFO
     org.springframework.security: DEBUG
     com.vignesh.audit: DEBUG
+    com.vignesh.patient: DEBUG
 #  file:
 #    name: /var/log/microservices/patient-service.log
 #  pattern:

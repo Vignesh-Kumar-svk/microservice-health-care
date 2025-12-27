@@ -129,7 +129,7 @@ services:
   api-gateway-service:
     build:
       context: .                # build from project root
-      dockerfile: ./api-gateway-service/Dockerfile
+      target: api-gateway-service
     image: api-gateway-service-jar
     container_name: api-gateway-service
     ports:
@@ -137,6 +137,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server-service:8763/eureka/
       AUTH_SERVICE_URL: http://auth-service:8000
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/healthcare-realm
 #      spring.cloud.gateway.server.webflux.routes[0].id: patient-service
 #      spring.cloud.gateway.server.webflux.routes[0].uri: lb://patient-service
 #      spring.cloud.gateway.server.webflux.routes[0].predicates[0]: Path=/patients/**
@@ -158,6 +159,7 @@ services:
     #    ports:
     #      - "8081:8081"
     environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/healthcare-realm
       SPRING_DATASOURCE_URL: jdbc:postgresql://patient-db:5432/patientdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: vignesh
@@ -305,6 +307,21 @@ services:
     networks:
       - hospital-network
 
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki.yml
+    volumes:
+      - ./loki.yml:/etc/loki/loki.yml
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - ./promtail/promtail.yml:/etc/promtail/promtail.yml
+      - /var/log/healthcare:/var/log/healthcare
+    command: -config.file=/etc/promtail/promtail.yml
+
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
@@ -326,6 +343,9 @@ services:
     image: quay.io/keycloak/keycloak
     command: start-dev
     environment:
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
       # ---- HTTP + hostname / issuer settings ----
 #      KC_HOSTNAME: keycloak  # ✅ for container network
 #      KC_HOSTNAME_PORT: 8080   # ✅ Internal port

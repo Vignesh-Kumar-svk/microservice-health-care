@@ -43,9 +43,7 @@ spring:
 #            issuer-uri: http://localhost:8091/realms/healthcare-realm
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/healthcare-realm
-          jwk-set-uri: http://localhost:8080/realms/healthcare-realm/protocol/openid-connect/certs
-
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
 
 
 #eureka
@@ -84,6 +82,7 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web.reactive: DEBUG
+    org.springframework.security.oauth2: DEBUG
 
 springdoc:
   swagger-ui:

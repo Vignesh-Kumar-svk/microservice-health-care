@@ -1,0 +1,39 @@
+global:
+  scrape_interval: 10s #To set a scrap interval for every 10sec. Default is 15sec
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'api-gateway-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['api-gateway-service:9000']
+        labels:
+          application: 'Api gateway Service Application'
+
+  - job_name: 'patient-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['patient-service:8081']
+        labels:
+          application: 'Patient Service Application'
+
+  - job_name: 'appointment-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'appointment-service:8082' ]
+        labels:
+          application: 'Appointment Service Application'
+
+  - job_name: 'notification-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['notification-service']
+        labels:
+          application: 'Notification Service Application'
