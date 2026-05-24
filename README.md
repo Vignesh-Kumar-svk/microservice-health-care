@@ -195,9 +195,6 @@ Provides:
 - Kafka monitoring
 - Infrastructure monitoring
 
-## Loki
-Centralized log aggregation and querying.
-
 ---
 
 # 🐳 Docker Containerization
