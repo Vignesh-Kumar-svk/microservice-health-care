@@ -35,7 +35,7 @@ Core focus areas:
 | Caching | Redis |
 | Service Discovery | Eureka Server |
 | API Gateway | Spring Cloud Gateway |
-| Monitoring | Prometheus, Grafana, Loki |
+| Monitoring | Prometheus, Grafana |
 | Resilience | Resilience4j |
 | Documentation | Swagger UI |
 | Containerization | Docker, Docker Compose |
@@ -80,7 +80,6 @@ Core focus areas:
 ## 5. Monitoring & Observability
 - Prometheus collects metrics
 - Grafana visualizes dashboards
-- Loki centralizes logs
 - Resilience4j ensures fault tolerance
 
 ---
