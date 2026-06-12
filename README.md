@@ -1,7 +1,7 @@
 # 🏥 Healthcare Microservices Platform
 
 A production-oriented **microservices-based healthcare management system** built using **Spring Boot, Spring Cloud, Kafka, Redis, Docker, PostgreSQL, and Observability Stack**.  
-This platform demonstrates scalable backend architecture, distributed system design, secure authentication, asynchronous communication, monitoring, and resilience engineering. :contentReference[oaicite:0]{index=0}
+This platform demonstrates scalable backend architecture, distributed system design, secure authentication, asynchronous communication, monitoring, and resilience engineering.
 
 ---
 
